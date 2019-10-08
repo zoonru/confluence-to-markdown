@@ -14,7 +14,7 @@ pandoc --version
 Install all project dependencies:
 
 ```
-npm install
+yarn install
 ```
 
 
@@ -23,7 +23,7 @@ npm install
 In the converter's directory:
 
 ```
-npm run start <pathResource> <pathResult>
+yarn start <pathResource> <pathResult>
 ```
 
 
