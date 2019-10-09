@@ -18,6 +18,13 @@ yarn install
 ```
 
 
+Build (convert .coffee to .js):
+
+```
+yarn build
+```
+
+
 ## Usage
 
 In the converter's directory:
