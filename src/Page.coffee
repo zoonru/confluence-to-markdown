@@ -24,7 +24,21 @@ class Page
 
   getFileNameNew: () ->
     return 'index.md' if @fileName == 'index.html'
-    @utils.sanitizeFilename(@heading) + '.md'
+
+    # --- look parent on navigations
+    fileName = @utils.sanitizeFilename(@heading) + '.md'
+    breadcrumbs = @content.find('#breadcrumbs')
+    lies = breadcrumbs.find('li:not(.first)')
+    return fileName if !lies.length
+
+    # --- create folders structure path
+    @pathToFolder = Array.from(lies).reduce((currentPath, li) ->
+      pathToFolder = breadcrumbs.find(li).text().trim()
+      # --- replace all non char for pandoc to underscore
+      pathToFolder = pathToFolder.replace(/[^A-Za-zА-Яа-я0-9]/g, '_')
+      return currentPath + pathToFolder + '/'
+    '')
+    return @pathToFolder + fileName
 
 
   getHeading: () ->

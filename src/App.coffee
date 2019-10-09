@@ -64,6 +64,7 @@ class App
     fullOutFileName = @_path.join dirOut, page.space, page.fileNameNew
 
     @logger.info 'Making Markdown ... ' + fullOutFileName
+    @createFoldersStructure dirOut, page.space, page.pathToFolder
     @writeMarkdownFile text, fullOutFileName
     @utils.copyAssets @utils.getDirname(page.path), @utils.getDirname(fullOutFileName)
     @logger.info 'Done\n'
@@ -89,6 +90,28 @@ class App
     out = @_exec command, cwd: fullOutDirName
     @logger.error out.stderr if out.status > 0
     @_fs.unlinkSync tempInputFile
+
+
+  ###*
+  # @param {string} full path to output
+  # @param {string} space name
+  # @param {string} full path to file
+  ###
+  createFoldersStructure: (dirOut, space, pathToFolder) ->
+    return if not pathToFolder
+
+    pathToSpace = @_path.join dirOut, space
+    if not @_fs.existsSync pathToSpace
+      @_fs.mkdirSync pathToSpace
+
+    folders = pathToFolder.split '/'
+                          .filter (path) -> Boolean(path)
+    for i, folder of folders
+      prevFolder = folders[i - 1]
+      prevFolder = if prevFolder then (prevFolder + '/') else ''
+      pathToFolder = @_path.join pathToSpace, prevFolder + folder
+      if not @_fs.existsSync pathToFolder
+        @_fs.mkdirSync pathToFolder
 
 
   ###*
