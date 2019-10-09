@@ -1,0 +1,1 @@
+var Bootstrap,bootstrap,pathResource,pathResult;Bootstrap=require("./Bootstrap"),pathResource=process.argv[2],pathResult=process.argv[3],(bootstrap=new Bootstrap).run(pathResource,pathResult);
