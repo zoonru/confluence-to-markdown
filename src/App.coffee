@@ -100,6 +100,9 @@ class App
   createFoldersStructure: (dirOut, space, pathToFolder) ->
     return if not pathToFolder
 
+    if not @_fs.existsSync dirOut
+      @_fs.mkdirSync dirOut
+
     pathToSpace = @_path.join dirOut, space
     if not @_fs.existsSync pathToSpace
       @_fs.mkdirSync pathToSpace
