@@ -114,7 +114,8 @@ class App
       prevFolder = if prevFolder then (prevFolder + '/') else ''
       pathToFolder = @_path.join pathToSpace, prevFolder + folder
       if not @_fs.existsSync pathToFolder
-        @_fs.mkdirSync pathToFolder
+        try @_fs.mkdirSync pathToFolder
+        catch err then console.log 'Cannot create ' + pathToFolder
 
 
   ###*

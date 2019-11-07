@@ -1,1 +1,0 @@
-var PageFactory;PageFactory=function(){var t;return t=require("./Page"),class{constructor(t,r){this.formatter=t,this.utils=r}create(r){return new t(r,this.formatter,this.utils)}}}.call(this),module.exports=PageFactory;
