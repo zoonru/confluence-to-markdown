@@ -16,9 +16,9 @@ class Bootstrap
 
   ###*
   # @param {string} pathResource Directory with HTML files or one file. Can be nested.
-  # @param {string|void} pathResult Directory where MD files will be generated to. Current dir will be used if none given.
+  # @param {string|void} pathResult Directory where MD files will be generated to. <./dist> dir will be used if none given.
   ###
-  run: (pathResource, pathResult = '') ->
+  run: (pathResource, pathResult = 'build') ->
     pathResource = _path.resolve pathResource
     pathResult = _path.resolve pathResult
 

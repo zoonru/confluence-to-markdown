@@ -62,11 +62,9 @@ class App
     @logger.info 'Parsing ... ' + page.path
     text = page.getTextToConvert pages
     fullOutFileName = @_path.join dirOut, page.space, page.fileNameNew
-
     @logger.info 'Making Markdown ... ' + fullOutFileName
-    @createFoldersStructure dirOut, page.space, page.pathToFolder
     @writeMarkdownFile text, fullOutFileName
-    @utils.copyAssets @utils.getDirname(page.path), @utils.getDirname(fullOutFileName)
+    @utils.copyAssets(fullOutFileName, page)
     @logger.info 'Done\n'
 
 
@@ -80,7 +78,6 @@ class App
     @_mkdirp.sync fullOutDirName, (error) ->
       if error
         @logger.error 'Unable to create directory #{fullOutDirName}'
-
     tempInputFile = fullOutFileName + '~'
     @_fs.writeFileSync tempInputFile, text, flag: 'w'
     command = 'pandoc -f html ' +
@@ -90,32 +87,6 @@ class App
     out = @_exec command, cwd: fullOutDirName
     @logger.error out.stderr if out.status > 0
     @_fs.unlinkSync tempInputFile
-
-
-  ###*
-  # @param {string} full path to output
-  # @param {string} space name
-  # @param {string} full path to file
-  ###
-  createFoldersStructure: (dirOut, space, pathToFolder) ->
-    return if not pathToFolder
-
-    if not @_fs.existsSync dirOut
-      @_fs.mkdirSync dirOut
-
-    pathToSpace = @_path.join dirOut, space
-    if not @_fs.existsSync pathToSpace
-      @_fs.mkdirSync pathToSpace
-
-    folders = pathToFolder.split '/'
-                          .filter (path) -> Boolean(path)
-    for i, folder of folders
-      prevFolder = folders[i - 1]
-      prevFolder = if prevFolder then (prevFolder + '/') else ''
-      pathToFolder = @_path.join pathToSpace, prevFolder + folder
-      if not @_fs.existsSync pathToFolder
-        try @_fs.mkdirSync pathToFolder
-        catch err then console.log 'Cannot create ' + pathToFolder
 
 
   ###*

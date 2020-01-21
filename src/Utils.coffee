@@ -59,7 +59,7 @@ class Utils
         fullPaths.push @readDirRecursive(fullPath, filesOnly)...
     fullPaths
 
-    
+
   ###*
   # Sanitize a filename, replacing invalid characters with an underscore
   # @param (string) filename Filename and extension, but not directory component
@@ -122,15 +122,37 @@ class Utils
 
 
   ###*
+  # Return assets links list
+  # @param {object} page Page instance
+  ###
+  getAssets: (page) ->
+    assetsList = page.content.find('img[src^="images"]').add('a[href^="attachments"]')
+    return if assetsList.length then Array.from(assetsList).reduce((lst, el) ->
+      path = el.attribs.href or el.attribs.src
+      lst.push(path) if path != undefined and !~lst.indexOf(path)
+      return lst
+    []) else []
+
+
+  ###*
   # Copies assets directories to path with MD files
   # @param {string} fullInPath Absolute path to file to convert
-  # @param {string} dirOut Directory where to place converted MD files
+  # @param {object} page Page instance
   ###
-  copyAssets: (pathWithHtmlFiles, dirOut) ->
-    for asset in ['images', 'attachments']
-      assetsDirIn = @_path.join pathWithHtmlFiles, asset
-      assetsDirOut = @_path.join dirOut, asset
-      @_ncp assetsDirIn, assetsDirOut if @isDir(assetsDirIn)
+  copyAssets: (fullInPath, page) ->
+    pathWithHtmlFiles = @getDirname page.path
+    dirOut = @getDirname fullInPath
+
+    for asset in @getAssets page
+      filename = @getBasename asset
+      dirname = @getDirname asset
+
+      assetDirIn = @_path.join pathWithHtmlFiles, dirname, filename
+      assetDirOut = @_path.join dirOut, dirname
+      assetDirOutFile = @_path.join assetDirOut, filename
+
+      @_fs.mkdirSync assetDirOut, { recursive: true } if not @_fs.existsSync assetDirOut
+      @_fs.copyFileSync assetDirIn, assetDirOutFile if @_fs.existsSync assetDirIn
 
 
 module.exports = Utils
