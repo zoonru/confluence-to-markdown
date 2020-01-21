@@ -14,7 +14,7 @@
   "repository": "git@github.com:zoonru/confluence-to-markdown.git",
   "dependencies": {
     "cheerio": "^1.0.0-rc.3",
-    "coffee-script": "^1.12.7",
+    "coffeescript": "^2.5.0",
     "mkdirp": "^0.5.1",
     "ncp": "^2.0.0",
     "path": "^0.12.7",
@@ -28,7 +28,7 @@
     "gulp-clean": "^0.4.0",
     "gulp-coffee": "^3.0.3",
     "gulp-terser": "^1.2.0",
-    "mocha": "^6.2.1"
+    "mocha": "^7.0.0"
   },
   "scripts": {
     "start": "coffee ./src/index.coffee",
